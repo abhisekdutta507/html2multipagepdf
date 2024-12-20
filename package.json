@@ -1,0 +1,26 @@
+{
+  "name": "@abhisek507/html2multipagepdf",
+  "version": "1.0.0",
+  "description": "Convert a pretty looking HTML template into a multipage PDF file.",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abhisekdutta507/html2multipagepdf.git"
+  },
+  "keywords": [
+    "html2pdf",
+    "html2multipagepdf",
+    "jspdf"
+  ],
+  "author": "abhisek507",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/abhisekdutta507/html2multipagepdf/issues"
+  },
+  "homepage": "https://github.com/abhisekdutta507/html2multipagepdf#readme",
+  "dependencies": {
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.2"
+  }
+}
