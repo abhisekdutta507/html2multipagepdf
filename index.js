@@ -1,8 +1,17 @@
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import { Generator, PageWithMaxPossibleWidthSelector } from "./constants";
-import { bestWidthAndHeight } from "./utils/height";
+import { bestWidth, bestHeight, bestWidthAndHeight } from "./utils/height";
 import { toHTMLElementArray } from "./utils/htmlparser";
+
+/**
+ * @param {HTMLElement} page
+ * @returns {Promise<HTMLCanvasElement>}
+ */
+const page2canvas = async (page) => {
+  const canvas = await html2canvas(page);
+  return canvas;
+};
 
 /**
  * @param {HTMLElement} page
@@ -34,7 +43,83 @@ const generateBalancedElements = async (
   remainingElements,
   balancedElements
 ) => {
-  return [];
+  if (!remainingElements.length) {
+    // convert the ui into an image
+    const canvas = await page2canvas(page);
+    const { width, height, margin } = bestWidthAndHeight({
+      pageWidth: pageOptions.format[0],
+      pageHeight: pageOptions.format[1],
+      margin: pageOptions.margin.narrow,
+      canvasWidth: canvas.width,
+      canvasHeight: canvas.height,
+    });
+    balancedElements.push({ canvas, width, height, margin });
+    return { page, balancedElements };
+  }
+
+  const [element, ...leftEls] = remainingElements;
+  element.classList.remove("hidden");
+  traversedElements.push(element);
+
+  // convert the ui into an image
+  const canvas = page.getBoundingClientRect();
+
+  // find the best width but not best the height
+  let {
+    width,
+    extras: { canvasWidthPercentage },
+  } = bestWidth({
+    pageWidth: pageOptions.format[0],
+    margin: pageOptions.margin.narrow,
+    canvasWidth: canvas.width,
+  });
+  const adjustedCanvasHeight =
+    (canvas.height * (100 - canvasWidthPercentage)) / 100;
+
+  // if the height responsible for best width is more than the page height
+  // then find the best height
+  if (adjustedCanvasHeight > pageOptions.format[1]) {
+    const {
+      height,
+      extras: { canvasHeightPercentage },
+    } = bestHeight({
+      pageHeight: pageOptions.format[1],
+      margin: pageOptions.margin.narrow,
+      canvasHeight: adjustedCanvasHeight,
+    });
+    width = (width * (100 - canvasHeightPercentage)) / 100;
+
+    if (leftEls.length !== 0) {
+      const canvas = await page2canvas(page);
+      balancedElements.push({
+        canvas,
+        width,
+        height,
+        margin: pageOptions.margin.narrow,
+      });
+
+      traversedElements.forEach((element) => {
+        element.classList.add("hidden");
+      });
+    }
+    return await generateBalancedElements(
+      page,
+      pageOptions,
+      elements,
+      traversedElements,
+      leftEls,
+      balancedElements
+    );
+  }
+
+  return await generateBalancedElements(
+    page,
+    pageOptions,
+    elements,
+    traversedElements,
+    leftEls,
+    balancedElements
+  );
 };
 
 /**
