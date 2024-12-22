@@ -8,3 +8,10 @@ declare module "@abhisek507/html2multipagepdf" {
     quality: number,
   ): Promise<jsPDF>;
 }
+
+export function generatePDF (
+  pageSelectors: string[],
+  pageOptions: PageOptions,
+  elementSelector: string,
+  quality: number,
+): Promise<jsPDF>;

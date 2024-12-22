@@ -40,5 +40,8 @@ export interface PageGenerator {
 
 export {
   jsPDF,
+};
+
+export type {
   jsPDFOptions,
 };
