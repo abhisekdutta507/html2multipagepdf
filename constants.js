@@ -1,3 +1,5 @@
+import { PageOptions } from "./constants";
+
 export const Quality = {
   100: 1,
   90: 0.9,
@@ -27,6 +29,7 @@ export const JSPDFOutputType = {
 /**
  * @description A4 page is 20.99 cm x 29.7 cm
  * or 446.2 px x 631.4 px
+ * @type {PageOptions}
  */
 export const A4 = {
   orientation: "portrait",
@@ -42,6 +45,7 @@ export const A4 = {
 /**
  * @description Legal page is 21.59 cm x 35.56 cm
  * or 459 px x 756 px
+ * @type {PageOptions}
  */
 export const Legal = {
   orientation: "portrait",
@@ -57,6 +61,7 @@ export const Legal = {
 /**
  * @description Letter page is 21.59 cm x 27.94 cm
  * or 459 px x 594 px
+ * @type {PageOptions}
  */
 export const Letter = {
   orientation: "portrait",
