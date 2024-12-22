@@ -1,11 +1,11 @@
 import { jsPDFOptions, jsPDF } from "jspdf";
 
-export interface Margin {
+export interface PageMargin {
   narrow: number;
   normal: number;
 }
 
-export interface Quality {
+export interface PageQuality {
   100: number;
   90: number;
   80: number;
@@ -23,7 +23,7 @@ export interface PageOptions extends jsPDFOptions {
   unit: "pt" | "px" | "in" | "mm" | "cm" | "ex" | "em" | "pc";
   format: number[];
   compress: boolean;
-  margin: Margin;
+  margin: PageMargin;
 }
 
 export interface JSPDFOutputType {
@@ -33,7 +33,7 @@ export interface JSPDFOutputType {
   datauristring: string;
 }
 
-export interface Generator {
+export interface PageGenerator {
   withMaxPossibleWidth: string;
   withRegularWidth: string;
 }

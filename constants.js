@@ -1,12 +1,12 @@
 import {
-  Quality,
+  PageQuality,
   PageOptions,
   JSPDFOutputType,
-  Generator,
+  PageGenerator,
 } from "./types";
 
 /**
- * @type {Quality}
+ * @type {PageQuality}
  */
 export const Quality = {
   100: 1,
@@ -88,7 +88,7 @@ export const Letter = {
 };
 
 /**
- * @type {Generator}
+ * @type {PageGenerator}
  */
 export const Generator = {
   withMaxPossibleWidth: "withMaxPossibleWidth",
