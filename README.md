@@ -1,4 +1,4 @@
-# html2multipagepdf v2.0.1
+# html2multipagepdf v2.0.2
 
 Easily convert HTML templates to PDF in React.js/Next.js. Generate dynamic, server-side PDFs for invoices, reports, or documents with seamless integration into your React.js/Next.js application.
 
@@ -7,7 +7,7 @@ Easily convert HTML templates to PDF in React.js/Next.js. Generate dynamic, serv
 Using npm:
 ```sh
 $ npm i -g npm
-$ npm i @abhisek507/html2multipagepdf@2.0.1
+$ npm i @abhisek507/html2multipagepdf@2.0.2
 ```
 
 In React.js/Next.js/Vanilla JavaScript:
@@ -19,14 +19,8 @@ import {
   RegularPageSelector,
   PageWithMaxPossibleWidthSelector,
   PageElementSelector,
+  JSPDFOutputType,
 } from "@abhisek507/html2multipagepdf/constants";
-
-const JSPDFOutputType = {
-  arraybuffer: 'arraybuffer',
-  blob: 'blob',
-  bloburi: 'bloburi',
-  datauristring: 'datauristring',
-};
 ```
 
 ## Setup
@@ -59,31 +53,7 @@ const JSX = () => (
       </div>
     </div>
 
-    <div className={`flex flex-col ${RegularPageSelector}`}>
-      <div className="header">
-        {/* header section */}
-      </div>
-
-      <div className={`${PageElementSelector}`}>
-        {/* content row 1 */}
-      </div>
-
-      <div className={`${PageElementSelector}`}>
-        {/* content row 2 */}
-      </div>
-
-      {/* ... */}
-
-      <div className={`${PageElementSelector}`}>
-        {/* content row n */}
-      </div>
-
-      <div className="footer">
-        {/* footer section */}
-      </div>
-    </div>
-
-    <div className={`flex flex-col ${RegularPageSelector}`}>
+    <div className={`flex flex-col ${PageWithMaxPossibleWidthSelector}`}>
       <div className="header">
         {/* header section */}
       </div>
@@ -120,14 +90,8 @@ import {
   RegularPageSelector,
   PageWithMaxPossibleWidthSelector,
   PageElementSelector,
+  JSPDFOutputType,
 } from "@abhisek507/html2multipagepdf/constants";
-
-const JSPDFOutputType = {
-  arraybuffer: 'arraybuffer',
-  blob: 'blob',
-  bloburi: 'bloburi',
-  datauristring: 'datauristring',
-};
 
 const handleGeneratePDF = async () => {
   const pageSelectors = [RegularPageSelector, PageWithMaxPossibleWidthSelector];
@@ -153,26 +117,26 @@ const handleGeneratePDF = async () => {
 
 A page selector is a `css class` will be used by the script to determine a page. There are 2 types of pageSelectors,
 
-- RegularPageSelector
-- PageWithMaxPossibleWidthSelector
+1. [RegularPageSelector]()
+2. [PageWithMaxPossibleWidthSelector]()
 
 ### RegularPageSelector
 
-The PDF pages generated for `RegularPageSelector` can have `dissimilar content width`. But the script will try to utilize most of the available PDF page width for the content.
+The PDF pages generated using `RegularPageSelector` can have `dis-similar content width`. But the script will try to utilize most of the available PDF page width for the content.
 
 ### PageWithMaxPossibleWidthSelector
 
-The PDF pages will have `exact same content width`. To achieve this behaviour script might not use most of the PDF page width.
+The PDF pages will have `exact same content width`. To achieve this behaviour the script might not use most of the PDF page width.
 
 For e.g: 2 pages are generated using `PageWithMaxPossibleWidthSelector`. The 1st page content has a width `A` & 2nd page content has a width `B`.
 
-Let's consider `A` is smaller that `B` then both the page contents will have width `A` to make sure they are of `exact same width`.
+Let's consider `A` is smaller than `B` then both the page contents will have width `A` to make sure they are of `exact same width`.
 
 ### Best practices
 
-- We must use `PageElementSelector` inside the `PageWithMaxPossibleWidthSelector` or `RegularPageSelector`.
-- As many `PageElementSelector` we use inside 1 `pageSelector` the more better PDF out we can expect.
-- The `PageElementSelector` must not have more height than the available page height.
+1. We must use `PageElementSelector` inside the `PageWithMaxPossibleWidthSelector` or `RegularPageSelector`.
+2. As many `PageElementSelector` we use inside 1 `pageSelector` the more better PDF output we can expect.
+3. The `PageElementSelector` must not have more height than the available page height.
 
 ## Source Code
 

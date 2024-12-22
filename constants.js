@@ -1,5 +1,13 @@
-import { PageOptions } from "./constants";
+import {
+  Quality,
+  PageOptions,
+  JSPDFOutputType,
+  Generator,
+} from "./types";
 
+/**
+ * @type {Quality}
+ */
 export const Quality = {
   100: 1,
   90: 0.9,
@@ -19,6 +27,9 @@ export const PageWithMaxPossibleWidthSelector =
 
 export const PageElementSelector = "html2multipagepdf-page-element";
 
+/**
+ * @type {JSPDFOutputType}
+ */
 export const JSPDFOutputType = {
   arraybuffer: "arraybuffer",
   blob: "blob",
@@ -74,6 +85,9 @@ export const Letter = {
   },
 };
 
+/**
+ * @type {Generator}
+ */
 export const Generator = {
   withMaxPossibleWidth: "withMaxPossibleWidth",
   withRegularWidth: "withRegularWidth",
