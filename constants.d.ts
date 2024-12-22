@@ -1,9 +1,67 @@
 declare module "@abhisek507/html2multipagepdf/constants" {
+  type ImageCompression = "NONE" | "FAST" | "MEDIUM" | "SLOW";
+
+  type ImageFormat =
+    | "RGBA"
+    | "UNKNOWN"
+    | "PNG"
+    | "TIFF"
+    | "JPG"
+    | "JPEG"
+    | "JPEG2000"
+    | "GIF87a"
+    | "GIF89a"
+    | "WEBP"
+    | "BMP";
+
+  interface EncryptionOptions {
+    userPassword?: string;
+    ownerPassword?: string;
+    userPermissions?: ("print" | "modify" | "copy" | "annot-forms")[];
+  }
+
+  interface jsPDFOptions {
+    orientation?: "p" | "portrait" | "l" | "landscape";
+    unit?: "pt" | "px" | "in" | "mm" | "cm" | "ex" | "em" | "pc";
+    format?: string | number[];
+    compress?: boolean;
+    precision?: number;
+    filters?: string[];
+    userUnit?: number;
+    encryption?: EncryptionOptions;
+    putOnlyUsedFonts?: boolean;
+    hotfixes?: string[];
+    floatPrecision?: number | "smart";
+  }
+
+  interface RGBAData {
+    data: Uint8ClampedArray;
+    width: number;
+    height: number;
+  }
+
+  interface ImageOptions {
+    imageData:
+    | string
+    | HTMLImageElement
+    | HTMLCanvasElement
+    | Uint8Array
+    | RGBAData;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    alias?: string;
+    compression?: ImageCompression;
+    rotation?: number;
+    format?: ImageFormat;
+  }
+
   export interface PageMargin {
     narrow: number;
     normal: number;
   }
-  
+
   export interface PageQuality {
     100: number;
     90: number;
@@ -16,7 +74,7 @@ declare module "@abhisek507/html2multipagepdf/constants" {
     20: number;
     10: number;
   }
-  
+
   export interface PageOptions extends jsPDFOptions {
     orientation: "p" | "portrait" | "l" | "landscape";
     unit: "pt" | "px" | "in" | "mm" | "cm" | "ex" | "em" | "pc";
@@ -31,7 +89,7 @@ declare module "@abhisek507/html2multipagepdf/constants" {
     bloburi: string;
     datauristring: string;
   }
-  
+
   export interface PageGenerator {
     withMaxPossibleWidth: string;
     withRegularWidth: string;
