@@ -117,8 +117,8 @@ const handleGeneratePDF = async () => {
 
 A page selector is a `css class` will be used by the script to determine a page. There are 2 types of pageSelectors,
 
-1. [RegularPageSelector]()
-2. [PageWithMaxPossibleWidthSelector]()
+1. [RegularPageSelector](?tab=readme-ov-file#regularpageselector)
+2. [PageWithMaxPossibleWidthSelector](?tab=readme-ov-file#pagewithmaxpossiblewidthselector)
 
 ### RegularPageSelector
 
