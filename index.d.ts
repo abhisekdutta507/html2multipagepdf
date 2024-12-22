@@ -1,5 +1,4 @@
-import { jsPDF } from "jspdf";
-import { PageOptions } from "./constants";
+import { PageOptions, jsPDF } from "./types";
 
 declare module "@abhisek507/html2multipagepdf" {
   export function generatePDF (
