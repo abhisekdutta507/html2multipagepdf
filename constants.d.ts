@@ -9,6 +9,7 @@ declare module "@abhisek507/html2multipagepdf/constants" {
   export const RegularPageSelector: string;
   export const PageWithMaxPossibleWidthSelector: string;
   export const PageElementSelector: string;
+  export const HiddenElementSelector: string;
 
   export const JSPDFOutputType: JSPDFOutputType;
 

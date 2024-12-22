@@ -27,6 +27,8 @@ export const PageWithMaxPossibleWidthSelector =
 
 export const PageElementSelector = "html2multipagepdf-page-element";
 
+export const HiddenElementSelector = "hidden";
+
 /**
  * @type {JSPDFOutputType}
  */

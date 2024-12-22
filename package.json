@@ -1,6 +1,6 @@
 {
   "name": "@abhisek507/html2multipagepdf",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Convert a pretty looking HTML template into a multipage PDF file.",
   "main": "index.js",
   "scripts": {},
