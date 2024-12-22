@@ -1,7 +1,6 @@
 import {
   Margin,
-  Quality,
-  PageOptions,
+  jsPDFOptions,
   JSPDFOutputType,
   Generator,
 } from "./types";
@@ -19,9 +18,24 @@ declare module "@abhisek507/html2multipagepdf/constants" {
 
   export const Generator: Generator;
 
-  export {
-    Margin,
-    Quality,
-    PageOptions,
-  };
+  export interface Quality {
+    100: number;
+    90: number;
+    80: number;
+    70: number;
+    60: number;
+    50: number;
+    40: number;
+    30: number;
+    20: number;
+    10: number;
+  }
+  
+  export interface PageOptions extends jsPDFOptions {
+    orientation: "p" | "portrait" | "l" | "landscape";
+    unit: "pt" | "px" | "in" | "mm" | "cm" | "ex" | "em" | "pc";
+    format: number[];
+    compress: boolean;
+    margin: Margin;
+  }
 }

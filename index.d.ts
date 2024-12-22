@@ -7,6 +7,4 @@ declare module "@abhisek507/html2multipagepdf" {
     elementSelector: string,
     quality: number,
   ): Promise<jsPDF>;
-
-  export default generatePDF;
 }
