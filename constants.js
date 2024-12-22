@@ -1,7 +1,7 @@
 import {
   PageQuality,
   PageOptions,
-  JSPDFOutputType,
+  OutputType,
   PageGenerator,
 } from "./types";
 
@@ -30,7 +30,7 @@ export const PageElementSelector = "html2multipagepdf-page-element";
 export const HiddenElementSelector = "hidden";
 
 /**
- * @type {JSPDFOutputType}
+ * @type {OutputType}
  */
 export const JSPDFOutputType = {
   arraybuffer: "arraybuffer",

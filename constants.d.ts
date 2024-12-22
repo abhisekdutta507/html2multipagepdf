@@ -2,7 +2,7 @@ import {
   PageMargin,
   PageQuality,
   jsPDFOptions,
-  JSPDFOutputType,
+  OutputType,
   PageGenerator,
 } from "./types";
 
@@ -12,7 +12,7 @@ declare module "@abhisek507/html2multipagepdf/constants" {
   export const PageElementSelector: string;
   export const HiddenElementSelector: string;
 
-  export const JSPDFOutputType: JSPDFOutputType;
+  export const JSPDFOutputType: OutputType;
 
   export const Generator: PageGenerator;
   export const Quality: PageQuality;

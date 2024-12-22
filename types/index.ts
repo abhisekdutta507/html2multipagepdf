@@ -26,7 +26,7 @@ export interface PageOptions extends jsPDFOptions {
   margin: PageMargin;
 }
 
-export interface JSPDFOutputType {
+export interface OutputType {
   arraybuffer: string;
   blob: string;
   bloburi: string;
