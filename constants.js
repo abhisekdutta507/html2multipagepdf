@@ -17,6 +17,13 @@ export const PageWithMaxPossibleWidthSelector =
 
 export const PageElementSelector = "html2multipagepdf-page-element";
 
+export const JSPDFOutputType = {
+  arraybuffer: "arraybuffer",
+  blob: "blob",
+  bloburi: "bloburi",
+  datauristring: "datauristring",
+};
+
 /**
  * @description A4 page is 20.99 cm x 29.7 cm
  * or 446.2 px x 631.4 px
