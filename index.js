@@ -1,6 +1,6 @@
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
-import { Generator, PageWithMaxPossibleWidthSelector } from "./constants";
+import { Generator, PageWithMaxPossibleWidthSelector, HiddenElementSelector } from "./constants";
 import { bestWidth, bestHeight, bestWidthAndHeight } from "./utils/height";
 import { toHTMLElementArray } from "./utils/htmlparser";
 
@@ -58,7 +58,7 @@ const generateBalancedElements = async (
   }
 
   const [element, ...leftEls] = remainingElements;
-  element.classList.remove("hidden");
+  element.classList.remove(HiddenElementSelector);
   traversedElements.push(element);
 
   // convert the ui into an image
@@ -99,7 +99,7 @@ const generateBalancedElements = async (
       });
 
       traversedElements.forEach((element) => {
-        element.classList.add("hidden");
+        element.classList.add(HiddenElementSelector);
       });
     }
     return await generateBalancedElements(
@@ -156,7 +156,7 @@ const generateBalancedPages = async (
   const [page, ...leftPages] = remainingPages;
   const elementsNodeList = page.querySelectorAll(`.${elementSelector}`);
   elementsNodeList.forEach((element) => {
-    element.classList.add("hidden");
+    element.classList.add(HiddenElementSelector);
   });
 
   const elements = toHTMLElementArray(elementsNodeList);
@@ -169,7 +169,7 @@ const generateBalancedPages = async (
     []
   );
   elementsNodeList.forEach((element) => {
-    element.classList.remove("hidden");
+    element.classList.remove(HiddenElementSelector);
   });
   traversedPages.push(page);
 
