@@ -1,4 +1,4 @@
-# html2multipagepdf v2.0.2
+# html2multipagepdf v2.0.3
 
 Easily convert HTML templates to PDF in React.js/Next.js. Generate dynamic, server-side PDFs for invoices, reports, or documents with seamless integration into your React.js/Next.js application.
 
@@ -7,7 +7,7 @@ Easily convert HTML templates to PDF in React.js/Next.js. Generate dynamic, serv
 Using npm:
 ```sh
 $ npm i -g npm
-$ npm i @abhisek507/html2multipagepdf@2.0.2
+$ npm i @abhisek507/html2multipagepdf@2.0.3
 ```
 
 In React.js/Next.js/Vanilla JavaScript:
@@ -117,8 +117,8 @@ const handleGeneratePDF = async () => {
 
 A page selector is a `css class` will be used by the script to determine a page. There are 2 types of pageSelectors,
 
-1. [RegularPageSelector]()
-2. [PageWithMaxPossibleWidthSelector]()
+1. [RegularPageSelector](?tab=readme-ov-file#regularpageselector)
+2. [PageWithMaxPossibleWidthSelector](?tab=readme-ov-file#pagewithmaxpossiblewidthselector)
 
 ### RegularPageSelector
 
