@@ -57,6 +57,12 @@ declare module "@abhisek507/html2multipagepdf" {
     format?: ImageFormat;
   }
 
+  interface PageInfo {
+    objId: number;
+    pageNumber: number;
+    pageContext: any;
+  }
+
   export class jsPDF {
     constructor(options?: jsPDFOptions);
     constructor(
@@ -129,7 +135,7 @@ declare module "@abhisek507/html2multipagepdf" {
     margin: PageMargin;
   }
 
-  interface PageConfig {
+  export interface PageConfig {
     quality: number;
     alignCenter: boolean;
   }
