@@ -1,7 +1,17 @@
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
-import { Generator, PageWithMaxPossibleWidthSelector, HiddenElementSelector } from "./constants";
-import { bestWidth, bestHeight, bestWidthAndHeight } from "./utils/height";
+import {
+  A4,
+  Generator,
+  PageWithMaxPossibleWidthSelector,
+  HiddenElementSelector,
+} from "./constants";
+import {
+  bestWidth,
+  bestHeight,
+  bestWidthAndHeight,
+  bestMargin,
+} from "./utils/height";
 import { toHTMLElementArray } from "./utils/htmlparser";
 
 /**
@@ -274,7 +284,10 @@ const BalancedPagesGeneratorCollection = new Map([
  * @param {string} page
  * @param {A4} pageOptions
  * @param {string} elementSelector
- * @param {number} quality
+ * @param {{
+ *    quality: number;
+ *    alignCenter: boolean;
+ * }} pageConfig
  * @param {Generator.withRegularWidth | Generator.withMaxPossibleWidth} generatorType
  * @returns {Promise<jsPDF>}
  */
@@ -283,7 +296,7 @@ const generateBalancedPagesWithOrWithoutMinWidth = async (
   page,
   pageOptions,
   elementSelector,
-  quality,
+  pageConfig,
   generatorType
 ) => {
   const generateBalancedPages =
@@ -294,12 +307,28 @@ const generateBalancedPagesWithOrWithoutMinWidth = async (
     elementSelector
   );
   balancedPages.forEach((page) => {
-    const convertedImage = page.canvas.toDataURL("image/jpeg", quality);
+    const convertedImage = page.canvas.toDataURL(
+      "image/jpeg",
+      pageConfig.quality
+    );
+    const margin = {
+      top: page.margin,
+      left: page.margin,
+    };
+    if (pageConfig.alignCenter) {
+      const { left, top } = bestMargin({
+        pageWidth: pageOptions.format[0],
+        margin: page.margin,
+        canvasWidth: page.width,
+      });
+      margin.left = left;
+      margin.top = top;
+    }
     pdf.addImage(
       convertedImage,
       "jpeg",
-      page.margin,
-      page.margin,
+      margin.left,
+      margin.top,
       page.width,
       page.height
     );
@@ -313,7 +342,10 @@ const generateBalancedPagesWithOrWithoutMinWidth = async (
  * @param {string[]} remainingPages
  * @param {A4} pageOptions
  * @param {string} elementSelector
- * @param {number} quality
+ * @param {{
+ *    quality: number;
+ *    alignCenter: boolean;
+ * }} pageConfig
  * @returns {Promise<jsPDF>}
  */
 const doGeneratePDF = async (
@@ -321,7 +353,7 @@ const doGeneratePDF = async (
   remainingPages,
   pageOptions,
   elementSelector,
-  quality
+  pageConfig
 ) => {
   if (!remainingPages.length) {
     return pdf;
@@ -337,24 +369,33 @@ const doGeneratePDF = async (
     page,
     pageOptions,
     elementSelector,
-    quality,
+    pageConfig,
     generatorType
   );
-  return doGeneratePDF(_pdf, leftPages, pageOptions, elementSelector, quality);
+  return doGeneratePDF(
+    _pdf,
+    leftPages,
+    pageOptions,
+    elementSelector,
+    pageConfig
+  );
 };
 
 /**
  * @param {string[]} pageSelectors
  * @param {A4} pageOptions
  * @param {string} elementSelector
- * @param {number} quality
+ * @param {{
+ *    quality: number;
+ *    alignCenter: boolean;
+ * }} pageConfig
  * @returns {Promise<jsPDF>}
  */
 export const generatePDF = async (
   pageSelectors,
   pageOptions,
   elementSelector,
-  quality
+  pageConfig
 ) => {
   /**
    * @type {jsPDF}
@@ -364,7 +405,7 @@ export const generatePDF = async (
     pageSelectors,
     pageOptions,
     elementSelector,
-    quality
+    pageConfig
   );
   const { pageNumber } = pdf.getCurrentPageInfo();
   pdf.deletePage(pageNumber);

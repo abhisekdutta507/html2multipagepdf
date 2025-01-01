@@ -1,13 +1,19 @@
-# html2multipagepdf v2.0.8
+# html2multipagepdf v2.0.9
 
 Easily convert HTML templates to PDF in React.js/Next.js. Generate dynamic, server-side PDFs for invoices, reports, or documents with seamless integration into your React.js/Next.js application.
 
 ## Installation
 
-Using npm:
+Install npm globally (ignore if already installed):
+
 ```sh
-$ npm i -g npm
-$ npm i @abhisek507/html2multipagepdf@2.0.8
+npm i -g npm
+```
+
+Install the `html2multipagepdf` library:
+
+```sh
+npm i @abhisek507/html2multipagepdf@2.0.9
 ```
 
 In React.js/Next.js/Vanilla JavaScript:
