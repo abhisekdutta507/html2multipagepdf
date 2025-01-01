@@ -1,24 +1,29 @@
-# html2multipagepdf v2.0.9
+# html2multipagepdf v2.1.0
 
 Easily convert HTML templates to PDF in React.js/Next.js. Generate dynamic, server-side PDFs for invoices, reports, or documents with seamless integration into your React.js/Next.js application.
+
+## [Live Demo](https://abhisekdutta.com/experiments/html2pdf) | [Example A](https://github.com/abhisekdutta507/documentation/tree/main/reactjs/implement-html-to-pdf-on-reactjs-or-javascript) | [Example B](https://bitbucket.org/abhisekdutta507/react-html-to-pdf/src/main/)
 
 ## Installation
 
 Install npm globally (ignore if already installed):
 
-```sh
+```bash
 npm i -g npm
 ```
 
 Install the `html2multipagepdf` library:
 
-```sh
-npm i @abhisek507/html2multipagepdf@2.0.9
+```bash
+npm i @abhisek507/html2multipagepdf@2.1.0
 ```
 
+## Setup
+
 In React.js/Next.js/Vanilla JavaScript:
+
 ```js
-import { generatePDF } from "@abhisek507/html2multipagepdf";
+import { generatePDF, PageConfig } from "@abhisek507/html2multipagepdf";
 import {
   A4,
   Quality,
@@ -29,9 +34,8 @@ import {
 } from "@abhisek507/html2multipagepdf/constants";
 ```
 
-## Setup
-
 CSS styles:
+
 ```css
 .hidden {
   display: none;
@@ -39,6 +43,7 @@ CSS styles:
 ```
 
 Wrap the JSX/HTML template:
+
 ```jsx
 const JSX = () => (
   <div className="">
@@ -96,7 +101,7 @@ const JSX = () => (
 ## Generate a PDF
 
 ```js
-import { generatePDF } from "@abhisek507/html2multipagepdf";
+import { generatePDF, PageConfig } from "@abhisek507/html2multipagepdf";
 import {
   A4,
   Quality,
@@ -110,10 +115,17 @@ const handleGeneratePDF = async () => {
   const pageSelectors = [RegularPageSelector, PageWithMaxPossibleWidthSelector];
   const pageOptions = A4; // A4 || Letter || Legal
   const elementSelector = PageElementSelector;
-  const quality = Quality[100] // quality can be 100% || 90% || 80% ... || 10%
+  const quality = Quality["100"]; // quality can be 100% || 90% || 80% ... || 10%
+  /**
+   * @type {PageConfig}
+   */
+  const pageConfig = {
+    quality,
+    alignCenter: true,
+  };
 
   try {
-    const pdf = await generatePDF(pageSelectors, pageOptions, elementSelector, quality);
+    const pdf = await generatePDF(pageSelectors, pageOptions, elementSelector, pageConfig);
     const time = new Date().getTime();
     pdf.save(`${name}-${time}.pdf`);
 
@@ -141,7 +153,7 @@ The PDF pages generated using `RegularPageSelector` can have `dis-similar conten
 
 The PDF pages will have `exact same content width`. To achieve this behaviour the script might not use most of the PDF page width.
 
-For e.g: 2 pages are generated using `PageWithMaxPossibleWidthSelector`. The 1st page content has a width `A` & 2nd page content has a width `B`.
+For **e.g**: 2 pages are generated using `PageWithMaxPossibleWidthSelector`. The 1st page content has a width `A` & 2nd page content has a width `B`.
 
 Let's consider `A` is smaller than `B` then both the page contents will have width `A` to make sure they are of `exact same width`.
 
@@ -150,6 +162,12 @@ Let's consider `A` is smaller than `B` then both the page contents will have wid
 1. We must use `PageElementSelector` inside the `PageWithMaxPossibleWidthSelector` or `RegularPageSelector`.
 2. As many `PageElementSelector` we use inside 1 `pageSelector` the more better PDF output we can expect.
 3. The `PageElementSelector` must not have more height than the available page height.
+
+## Credits
+
+1. [html2canvas](https://www.npmjs.com/package/html2canvas)
+2. [jsPDF](https://www.npmjs.com/package/jspdf)
+
 
 ## Source Code
 
