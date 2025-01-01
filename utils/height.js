@@ -118,3 +118,31 @@ export const bestWidthAndHeight = ({
     margin,
   };
 };
+
+/**
+ * @param {{
+ *    pageWidth: number;
+ *    canvasWidth: number;
+ *    margin: number;
+ * }} param 
+ * @returns {{
+ *    top: number;
+ *    left: number;
+ * }}
+ */
+export const bestMargin = ({
+  pageWidth,
+  canvasWidth,
+  margin,
+}) => {
+  const totalWidth = canvasWidth + 2 * margin;
+  const emptySpace = pageWidth - totalWidth;
+  const bestMargin = {
+    top: margin,
+    left: margin,
+  };
+  if (emptySpace > 0) {
+    bestMargin.left += (emptySpace / 2);
+  };
+  return bestMargin;
+};

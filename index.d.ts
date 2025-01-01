@@ -129,10 +129,15 @@ declare module "@abhisek507/html2multipagepdf" {
     margin: PageMargin;
   }
 
+  interface PageConfig {
+    quality: number;
+    alignCenter: boolean;
+  }
+
   export function generatePDF(
     pageSelectors: string[],
     pageOptions: PageOptions,
     elementSelector: string,
-    quality: number
+    pageConfig: PageConfig
   ): Promise<jsPDF>;
 }
