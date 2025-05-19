@@ -5,6 +5,10 @@ import {
   Generator,
   PageWithMaxPossibleWidthSelector,
   HiddenElementSelector,
+  PageNoElementSelector,
+  CustomPageNoElementSelector,
+  CustomTotalPageNoElementSelector,
+  PageNoConfig,
 } from "./constants";
 import {
   bestWidth,
@@ -26,6 +30,10 @@ const page2canvas = async (page) => {
 /**
  * @param {HTMLElement} page
  * @param {A4} pageOptions
+ * @param {{
+ *  all: number;
+ *  custom: number;
+ * }} pageNoConfig
  * @param {HTMLElement[]} elements
  * @param {HTMLElement[]} traversedElements
  * @param {HTMLElement[]} remainingElements
@@ -43,17 +51,23 @@ const page2canvas = async (page) => {
  *      width: number;
  *      margin: number;
  *  }[];
+ *  pageNoConfig: {
+ *    all: number;
+ *    custom: number;
+ *  };
  * }>}
  */
 const generateBalancedElements = async (
   page,
   pageOptions,
+  pageNoConfig,
   elements,
   traversedElements,
   remainingElements,
   balancedElements
 ) => {
   if (!remainingElements.length) {
+    const { pageNoConfig: _pageNoConfig } = generatePageNo(page, pageNoConfig);
     // convert the ui into an image
     const canvas = await page2canvas(page);
     const { width, height, margin } = bestWidthAndHeight({
@@ -64,7 +78,7 @@ const generateBalancedElements = async (
       canvasHeight: canvas.height,
     });
     balancedElements.push({ canvas, width, height, margin });
-    return { page, balancedElements };
+    return { page, balancedElements, pageNoConfig: _pageNoConfig };
   }
 
   const [element, ...leftEls] = remainingElements;
@@ -99,7 +113,12 @@ const generateBalancedElements = async (
     });
     width = (width * (100 - canvasHeightPercentage)) / 100;
 
+    let _pageNoConfig = { ...pageNoConfig };
+
     if (leftEls.length !== 0) {
+      const { pageNoConfig: __pageNoConfig } = generatePageNo(page, pageNoConfig);
+      _pageNoConfig = __pageNoConfig;
+
       const canvas = await page2canvas(page);
       balancedElements.push({
         canvas,
@@ -115,6 +134,7 @@ const generateBalancedElements = async (
     return await generateBalancedElements(
       page,
       pageOptions,
+      _pageNoConfig,
       elements,
       traversedElements,
       leftEls,
@@ -125,6 +145,7 @@ const generateBalancedElements = async (
   return await generateBalancedElements(
     page,
     pageOptions,
+    pageNoConfig,
     elements,
     traversedElements,
     leftEls,
@@ -135,6 +156,10 @@ const generateBalancedElements = async (
 /**
  * @param {HTMLElement[]} pages
  * @param {A4} pageOptions
+ * @param {{
+ *  all: number;
+ *  custom: number;
+ * }} pageNoConfig
  * @param {HTMLElement[]} traversedPages
  * @param {HTMLElement[]} remainingPages
  * @param {{
@@ -145,22 +170,32 @@ const generateBalancedElements = async (
  * }[]} balancedPages
  * @param {string} elementSelector
  * @returns {Promise<{
- *   canvas: HTMLCanvasElement,
- *   height: number,
- *   width: number,
- *   margin: number,
- * }[]>}
+ *  balancedPages: {
+ *    canvas: HTMLCanvasElement;
+ *    height: number;
+ *    width: number;
+ *    margin: number;
+ *  }[];
+ *  pageNoConfig: {
+ *    all: number;
+ *    custom: number;
+ *  };
+ * }>}
  */
 const generateBalancedPages = async (
   pages,
   pageOptions,
+  pageNoConfig,
   traversedPages,
   remainingPages,
   balancedPages,
   elementSelector
 ) => {
   if (!remainingPages.length) {
-    return balancedPages;
+    return {
+      balancedPages,
+      pageNoConfig,
+    };
   }
 
   const [page, ...leftPages] = remainingPages;
@@ -170,9 +205,10 @@ const generateBalancedPages = async (
   });
 
   const elements = toHTMLElementArray(elementsNodeList);
-  const { balancedElements } = await generateBalancedElements(
+  const { balancedElements, pageNoConfig: _pageNoConfig } = await generateBalancedElements(
     page,
     pageOptions,
+    pageNoConfig,
     elements,
     [],
     elements,
@@ -186,6 +222,7 @@ const generateBalancedPages = async (
   return await generateBalancedPages(
     pages,
     pageOptions,
+    _pageNoConfig,
     traversedPages,
     leftPages,
     [...balancedPages, ...balancedElements],
@@ -196,53 +233,80 @@ const generateBalancedPages = async (
 /**
  * @param {string} page
  * @param {A4} pageOptions
+ * @param {{
+ *  all: number;
+ *  custom: number;
+ * }} pageNoConfig
  * @param {string} elementSelector
  * @returns {Promise<{
- *   canvas: HTMLCanvasElement;
- *   height: number;
- *   width: number;
- *   margin: number;
- * }[]>}
+ *  balancedPages: {
+ *    canvas: HTMLCanvasElement;
+ *    height: number;
+ *    width: number;
+ *    margin: number;
+ *  }[];
+ *  pageNoConfig: {
+ *    all: number;
+ *    custom: number;
+ *  };
+ * }>}
  */
 const generateBalancedPagesWithRegularWidth = async (
   page,
   pageOptions,
+  pageNoConfig,
   elementSelector
 ) => {
   const pagesNodeList = document.querySelectorAll(`.${page}`);
   const pages = toHTMLElementArray(pagesNodeList);
-  const balancedPages = await generateBalancedPages(
+  const { balancedPages, pageNoConfig: _pageNoConfig } = await generateBalancedPages(
     pages,
     pageOptions,
+    pageNoConfig,
     [],
     pages,
     [],
     elementSelector
   );
-  return balancedPages;
+  return {
+    balancedPages,
+    pageNoConfig: _pageNoConfig,
+  };
 };
 
 /**
  * @param {string} page
  * @param {A4} pageOptions
+ * @param {{
+ *  all: number;
+ *  custom: number;
+ * }} pageNoConfig
  * @param {string} elementSelector
  * @returns {Promise<{
- *   canvas: HTMLCanvasElement;
- *   height: number;
- *   width: number;
- *   margin: number;
- * }[]>}
+ *  balancedPages: {
+ *    canvas: HTMLCanvasElement;
+ *    height: number;
+ *    width: number;
+ *    margin: number;
+ *  }[];
+ *  pageNoConfig: {
+ *    all: number;
+ *    custom: number;
+ *  };
+ * }>}
  */
 const generateBalancedPagesWithMaxPossibleWidth = async (
   page,
   pageOptions,
+  pageNoConfig,
   elementSelector
 ) => {
   const pagesNodeList = document.querySelectorAll(`.${page}`);
   const pages = toHTMLElementArray(pagesNodeList);
-  const balancedPages = await generateBalancedPages(
+  const { balancedPages, pageNoConfig: _pageNoConfig } = await generateBalancedPages(
     pages,
     pageOptions,
+    pageNoConfig,
     [],
     pages,
     [],
@@ -271,7 +335,10 @@ const generateBalancedPagesWithMaxPossibleWidth = async (
     }
   );
 
-  return balancedPagesWithMinWidth;
+  return {
+    balancedPages: balancedPagesWithMinWidth,
+    pageNoConfig: _pageNoConfig,
+  };
 };
 
 const BalancedPagesGeneratorCollection = new Map([
@@ -288,8 +355,18 @@ const BalancedPagesGeneratorCollection = new Map([
  *    quality: number;
  *    alignCenter: boolean;
  * }} pageConfig
+ * @param {{
+ *  all: number;
+ *  custom: number;
+ * }} pageNoConfig
  * @param {Generator.withRegularWidth | Generator.withMaxPossibleWidth} generatorType
- * @returns {Promise<jsPDF>}
+ * @returns {Promise<{
+ *  pdf: jsPDF;
+ *  pageNoConfig: {
+ *    all: number;
+ *    custom: number;
+ *  };
+ * }>}
  */
 const generateBalancedPagesWithOrWithoutMinWidth = async (
   pdf,
@@ -297,13 +374,15 @@ const generateBalancedPagesWithOrWithoutMinWidth = async (
   pageOptions,
   elementSelector,
   pageConfig,
-  generatorType
+  pageNoConfig,
+  generatorType,
 ) => {
   const generateBalancedPages =
     BalancedPagesGeneratorCollection.get(generatorType);
-  const balancedPages = await generateBalancedPages(
+  const { balancedPages, pageNoConfig: _pageNoConfig } = await generateBalancedPages(
     page,
     pageOptions,
+    pageNoConfig,
     elementSelector
   );
   balancedPages.forEach((page) => {
@@ -334,7 +413,46 @@ const generateBalancedPagesWithOrWithoutMinWidth = async (
     );
     pdf.addPage();
   });
-  return pdf;
+  return {
+    pdf,
+    pageNoConfig: _pageNoConfig,
+  };
+};
+
+/**
+ * @param {HTMLElement} page
+ * @param {{
+ *  all: number;
+ *  custom: number;
+ * }} pageNoConfig
+ * @returns {{
+ *  pageNoConfig: {
+ *    all: number;
+ *    custom: number;
+ *  };
+ * }}
+ */
+const generatePageNo = (page, pageNoConfig) => {
+  const _pageNoConfig = {
+    all: pageNoConfig.all + 1,
+    custom: pageNoConfig.custom,
+  };
+
+  const pageNoElement = page.querySelector(`.${PageNoElementSelector}`);
+  if (pageNoElement) {
+    pageNoElement.innerHTML = `${_pageNoConfig.all}`;
+  }
+
+  const customPageNoElement = page.querySelector(`.${CustomPageNoElementSelector}`);
+  if (customPageNoElement) {
+    // increase the page number
+    _pageNoConfig.custom += 1;
+    customPageNoElement.innerHTML = `${_pageNoConfig.custom}`;
+  }
+
+  return {
+    pageNoConfig: _pageNoConfig,
+  };
 };
 
 /**
@@ -346,6 +464,10 @@ const generateBalancedPagesWithOrWithoutMinWidth = async (
  *    quality: number;
  *    alignCenter: boolean;
  * }} pageConfig
+ * @param {{
+ *  all: number;
+ *  custom: number;
+ * }} pageNoConfig
  * @returns {Promise<jsPDF>}
  */
 const doGeneratePDF = async (
@@ -353,7 +475,8 @@ const doGeneratePDF = async (
   remainingPages,
   pageOptions,
   elementSelector,
-  pageConfig
+  pageConfig,
+  pageNoConfig,
 ) => {
   if (!remainingPages.length) {
     return pdf;
@@ -364,20 +487,22 @@ const doGeneratePDF = async (
     page === PageWithMaxPossibleWidthSelector
       ? Generator.withMaxPossibleWidth
       : Generator.withRegularWidth;
-  const _pdf = await generateBalancedPagesWithOrWithoutMinWidth(
+  const { pdf: _pdf, pageNoConfig: _pageNoConfig } = await generateBalancedPagesWithOrWithoutMinWidth(
     pdf,
     page,
     pageOptions,
     elementSelector,
     pageConfig,
-    generatorType
+    pageNoConfig,
+    generatorType,
   );
   return doGeneratePDF(
     _pdf,
     leftPages,
     pageOptions,
     elementSelector,
-    pageConfig
+    pageConfig,
+    _pageNoConfig,
   );
 };
 
@@ -405,7 +530,8 @@ export const generatePDF = async (
     pageSelectors,
     pageOptions,
     elementSelector,
-    pageConfig
+    pageConfig,
+    PageNoConfig(),
   );
   const { pageNumber } = pdf.getCurrentPageInfo();
   pdf.deletePage(pageNumber);

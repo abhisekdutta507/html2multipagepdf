@@ -95,15 +95,25 @@ declare module "@abhisek507/html2multipagepdf/constants" {
     withRegularWidth: string;
   }
 
+  export interface IPageNoConfig {
+    all: number;
+    custom: number;
+  }
+
   export const RegularPageSelector: string;
   export const PageWithMaxPossibleWidthSelector: string;
   export const PageElementSelector: string;
+  export const PageNoElementSelector: string;
+  export const CustomPageNoElementSelector: string;
+  export const CustomTotalPageNoElementSelector: string;
   export const HiddenElementSelector: string;
 
   export const JSPDFOutputType: OutputType;
 
   export const Generator: PageGenerator;
   export const Quality: PageQuality;
+
+  export const PageNoConfig: () => IPageNoConfig;
 
   export const A4: PageOptions;
   export const Legal: PageOptions;

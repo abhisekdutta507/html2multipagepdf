@@ -1,4 +1,4 @@
-# html2multipagepdf v2.1.0
+# html2multipagepdf v2.1.1
 
 Easily convert HTML templates to PDF in React.js/Next.js. Generate dynamic, server-side PDFs for invoices, reports, or documents with seamless integration into your React.js/Next.js application.
 
@@ -15,7 +15,7 @@ npm i -g npm
 Install the `html2multipagepdf` library:
 
 ```bash
-npm i @abhisek507/html2multipagepdf@2.1.0
+npm i @abhisek507/html2multipagepdf@2.1.1
 ```
 
 ## Setup
@@ -31,6 +31,8 @@ import {
   PageWithMaxPossibleWidthSelector,
   PageElementSelector,
   JSPDFOutputType,
+  PageNoElementSelector,
+  CustomPageNoElementSelector,
 } from "@abhisek507/html2multipagepdf/constants";
 ```
 
@@ -50,6 +52,11 @@ const JSX = () => (
     <div className={`flex flex-col ${RegularPageSelector}`}>
       <div className="header">
         {/* header section */}
+
+        <div className='flex align-items-center gap-4'>
+          <span>Page</span>
+          <span className={CustomPageNoElementSelector}></span>
+        </div>
       </div>
 
       <div className={`${PageElementSelector}`}>
@@ -162,6 +169,21 @@ Let's consider `A` is smaller than `B` then both the page contents will have wid
 1. We must use `PageElementSelector` inside the `PageWithMaxPossibleWidthSelector` or `RegularPageSelector`.
 2. As many `PageElementSelector` we use inside 1 `pageSelector` the more better PDF output we can expect.
 3. The `PageElementSelector` must not have more height than the available page height.
+
+## Display page number
+
+We can either display each page number or custom page number,
+
+1. [PageNoElementSelector](?tab=readme-ov-file#pagenoelementselector)
+2. [CustomPageNoElementSelector](?tab=readme-ov-file#custompagenoelementselector)
+
+### PageNoElementSelector
+
+The page no will be conted from first to last. Whenever the className `PageNoElementSelector` will be there on a page, it will be updated with the page no.
+
+### CustomPageNoElementSelector
+
+The `CustomPageNoElementSelector` will allow us to display the page numbers in a controlled sequence. For eg. page 1 & 3 have the className `CustomPageNoElementSelector`, then `page 1` will be considered as `page 1` but `page 3` will be considered as `page 2`. 
 
 ## Credits
 

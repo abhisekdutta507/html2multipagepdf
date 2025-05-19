@@ -20,6 +20,12 @@ export const PageWithMaxPossibleWidthSelector =
 
 export const PageElementSelector = "html2multipagepdf-page-element";
 
+export const PageNoElementSelector = "html2multipagepdf-page-no-element";
+
+export const CustomPageNoElementSelector = "html2multipagepdf-custom-page-no-element";
+
+export const CustomTotalPageNoElementSelector = "html2multipagepdf-custom-total-page-no-element";
+
 export const HiddenElementSelector = "hidden";
 
 /**
@@ -87,3 +93,8 @@ export const Generator = {
   withMaxPossibleWidth: "withMaxPossibleWidth",
   withRegularWidth: "withRegularWidth",
 };
+
+export const PageNoConfig = () => ({
+  all: 0,
+  custom: 0,
+});
